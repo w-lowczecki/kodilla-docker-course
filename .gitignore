@@ -1,0 +1,12 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# --- System 
+.DS_Store
+Thumbs.db
+*.log
+coverage/
+

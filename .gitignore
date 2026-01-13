@@ -1,12 +1,31 @@
-# IntelliJ
+# ===== Build tools =====
+.gradle/
+build/
+target/
+
+# ===== IDE =====
 .idea/
 *.iml
 *.iws
 *.ipr
+out/
+.classpath
+.project
+.settings/
+.vscode/
 
-# --- System 
+# ===== Java =====
+*.class
+*.log
+hs_err_pid*
+
+# ===== OS =====
 .DS_Store
 Thumbs.db
-*.log
-coverage/
 
+# ===== Test & coverage =====
+coverage/
+*.exec
+
+# ===== Temporary =====
+tmp/

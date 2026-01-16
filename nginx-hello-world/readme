@@ -1,0 +1,9 @@
+pwsh
+
+docker build -t wojteklo/nginx-hello-world:1.0.0 .
+
+docker run -d -p 8080:80 --name nginx-hello -v ${pwd}\index.html:/usr/share/nginx/html/index.html wojteklo/nginx-hello-world:1.0.0
+docker exec nginx-hello /bin/sh -c "ls /usr/share/nginx/html/"
+
+docker run -d -p 8080:80 --name nginx-hello wojteklo/nginx-hello-world:1.0.0
+docker exec nginx-hello /bin/sh -c "ls /usr/share/nginx/html/"

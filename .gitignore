@@ -29,3 +29,5 @@ coverage/
 
 # ===== Temporary =====
 tmp/
+
+node_modules/

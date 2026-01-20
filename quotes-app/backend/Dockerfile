@@ -6,10 +6,6 @@ ARG JAR_FILE
 
 COPY ${JAR_FILE} app.jar
 
-ENV POSTGRES_USER=kodilla
-ENV POSTGRES_PASSWORD=kodilla
-ENV POSTGRES_DB=kodilla-quotes
-
 EXPOSE 8080
 
 CMD ["java", "-jar", "app.jar"]

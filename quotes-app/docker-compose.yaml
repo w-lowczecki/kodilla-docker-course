@@ -1,0 +1,31 @@
+services:
+  database:
+    container_name: quotes-database
+    build:
+      context: ./database
+    env_file:
+      - ./env/database.env
+    volumes:
+      - pgdata:/var/lib/postgresql
+  backend:
+    container_name: quotes-backend
+    build:
+      context: ./backend
+      args:
+        JAR_FILE: build/libs/quotes-0.0.1-SNAPSHOT.jar
+    env_file:
+      - ./env/backend.env
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+  frontend:
+    container_name: quotes-frontend
+    build:
+      context: ./frontend
+    ports:
+      - 80:80
+    depends_on:
+      - backend
+volumes:
+  pgdata:

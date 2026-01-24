@@ -17,7 +17,6 @@ const customStyles = {
 };
 
 export default function Checkout({ order }) {
-  let subtitle;
   const [phone, setPhone] = React.useState("");
   const [address, setAddress] = React.useState("");
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -27,7 +26,6 @@ export default function Checkout({ order }) {
   }
 
   function afterOpenModal() {
-    subtitle.style.color = "#f00";
   }
 
   function closeModal() {
@@ -37,11 +35,12 @@ export default function Checkout({ order }) {
   const placeOrder = async () => {
     if (address && phone && order.length) {
       try {
-        const order = await axios.post("/api/orders", {
-          order,
+        const orderToSend =  {
+          ...(order[0]), // fixme
           phone,
           address,
-        });
+        };
+        const savedOrder = await axios.post("/api/orders", orderToSend);
         setIsOpen(false);
       } catch (error) {}
     }
@@ -70,7 +69,7 @@ export default function Checkout({ order }) {
         <UnorderedList>
           {order.map((item) => (
             <ListItem>
-              {item.product} x {item.quantity}
+              {item.productName} x {item.quantity}
             </ListItem>
           ))}
         </UnorderedList>

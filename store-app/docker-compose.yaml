@@ -1,0 +1,72 @@
+services:
+  database:
+    container_name: store-mysql
+    image: mysql:8.4
+    env_file:
+      - ./env/database.env
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent" ]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+  products:
+    container_name: products-api
+    build:
+      context: ./products-api
+      args:
+        JAR_FILE: build/libs/products-api-0.0.1-SNAPSHOT.jar
+      no_cache: true
+    env_file:
+      - ./env/products.env
+      - ./env/shared-rabbitmq.env
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/api/products" ]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+  frontend:
+    container_name: store-frontend
+    build:
+      context: ./store-frontend
+    volumes:
+      - ./store-frontend/src:/app/src
+      - ./store-frontend/public:/app/public
+    ports:
+      - 3000:3000
+    stdin_open: true
+    tty: true
+    depends_on:
+      products:
+        condition: service_healthy
+  broker:
+    container_name: store-rabbitmq
+    image: rabbitmq:3.12.13-management
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+  notifications:
+    container_name: store-notifications
+    build:
+      context: ./notifications-api
+    env_file:
+      - ./env/shared-rabbitmq.env
+    volumes:
+      - ./notifications-api/index.html:/app/index.html
+    depends_on:
+      broker:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mysql-data:

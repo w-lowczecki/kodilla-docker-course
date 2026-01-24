@@ -25,10 +25,10 @@ function App() {
   ]);
   const [order, setOrder] = useState([]);
 
-  const addToOrder = (product) => {
+  const addToOrder = ({id:productId, name:productName}) => {
     const updatedOrder = [...order];
-    const index = updatedOrder.findIndex((item) => item.product === product);
-    if (index === -1) updatedOrder.push({ product, quantity: 1 });
+    const index = updatedOrder.findIndex((item) => item.productId === productId);
+    if (index === -1) updatedOrder.push({ productId, productName, quantity: 1 });
     else updatedOrder[index].quantity = updatedOrder[index].quantity + 1;
     setOrder(updatedOrder);
   };
@@ -36,7 +36,9 @@ function App() {
   const fetchProducts = async () => {
     try {
       const p = await axios.get("/api/products");
-      setProducts(p.data.products);
+      if (p?.data?.length) {
+        setProducts(p.data);
+      }
     } catch (error) {}
   };
 
@@ -135,7 +137,7 @@ function App() {
                   data-item-url="/"
                   data-item-description={product.description}
                   data-item-price={product.price}
-                  onClick={() => addToOrder(product.name)}
+                  onClick={() => addToOrder(product)}
                 >
                   Add to Cart
                 </Button>

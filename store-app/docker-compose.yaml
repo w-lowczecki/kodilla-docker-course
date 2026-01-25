@@ -14,11 +14,7 @@ services:
       start_period: 20s
   products:
     container_name: products-api
-    build:
-      context: ./products-api
-      args:
-        JAR_FILE: build/libs/products-api-0.0.1-SNAPSHOT.jar
-      no_cache: true
+    image: wojteklo/store-app-products-api:1.0.0
     env_file:
       - ./env/products.env
       - ./env/shared-rabbitmq.env
@@ -34,8 +30,7 @@ services:
     restart: unless-stopped
   frontend:
     container_name: store-frontend
-    build:
-      context: ./store-frontend
+    image: wojteklo/store-app-frontend:1.0.0
     volumes:
       - ./store-frontend/src:/app/src
       - ./store-frontend/public:/app/public
@@ -57,8 +52,7 @@ services:
       start_period: 10s
   notifications:
     container_name: store-notifications
-    build:
-      context: ./notifications-api
+    image: wojteklo/store-app-notifications-api:1.0.0
     env_file:
       - ./env/shared-rabbitmq.env
     volumes:

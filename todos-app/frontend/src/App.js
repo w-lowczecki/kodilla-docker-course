@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 // const BACKEND_URL = "http://localhost:8000/todos";
-const BACKEND_URL = "http://todo-backend-app:8000/todos"
+const BACKEND_URL = "/api/todos"
 
 function App() {
   const [todos, setTodos] = useState([]);

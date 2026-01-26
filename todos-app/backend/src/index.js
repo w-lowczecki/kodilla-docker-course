@@ -13,14 +13,14 @@ const MONGO_URI = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_P
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/todos", async (req, res) => {
+app.get("/api/todos", async (req, res) => {
   const todos = await Todo.find();
   return res.status(200).json({
     todos,
   });
 });
 
-app.post("/todos", async (req, res) => {
+app.post("/api/todos", async (req, res) => {
   const name = req.body.name;
   const todo = new Todo({
     name,
@@ -29,7 +29,7 @@ app.post("/todos", async (req, res) => {
   res.status(201).json({ message: "Goal saved", todo });
 });
 
-app.put("/todos/:id", async (req, res) => {
+app.put("/api/todos/:id", async (req, res) => {
   const todo = await Todo.findById(req.params.id);
 
   todo.completed = !todo.completed;
@@ -39,7 +39,7 @@ app.put("/todos/:id", async (req, res) => {
   return res.status(201).json({ message: "Todo saved", todo });
 });
 
-app.delete("/todos/:id", async (req, res) => {
+app.delete("/api/todos/:id", async (req, res) => {
   await Todo.deleteOne({
     id: req.params.id,
   });

@@ -1,0 +1,31 @@
+kubectl create ns nginx-ns
+kubectl -n nginx-ns create deployment --image=nginx nginx-app
+
+# Wyświetl wszystkie zasoby typu deployment.
+kubectl get deployment --all-namespaces
+
+# Wyświetl informacje na temat tego konkretnego zasobu typu deployment.
+kubectl -n nginx-ns describe deployment nginx-app
+
+# Wyświetl tylko nazwy wszystkich podów w utworzonej przestrzeni nazw.
+kubectl -n nginx-ns get pod -o name
+
+#Wyświetl plik manifest w formacie yaml dla utworzonego zasobu typu deployment.
+kubectl -n nginx-ns get deployment nginx-app -o yaml
+
+# Wypisz zawartość pliku /etc/hosts z istniejącego w przestrzeni nazw nginx-ns poda.
+kubectl -n nginx-ns exec $(kubectl -n nginx-ns get pod -o name) -- cat /etc/hosts
+
+# Usuń pod istniejący w tej przestrzeni nazw.
+kubectl -n nginx-ns delete $(kubectl -n nginx-ns get pod -o name)
+
+# Usuń zasób deployment, który utworzyłeś.
+kubectl -n nginx-ns delete deploy nginx-app
+
+# Usuń utworzoną przestrzeń nazw.
+kubectl delete ns nginx-ns
+
+
+
+
+
